@@ -8,14 +8,16 @@ var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouter = require('./routes/auth');
+var cocktailsRouter = require('./routes/cocktails')
 
 var app = express();
 
 app.use(logger('dev'));
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 
 app.set('trust proxy', 1);
 app.enable('trust proxy');
@@ -30,8 +32,10 @@ app.use(
 //     cors()
 //   );
 
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter)
+app.use('/cocktails', cocktailsRouter)
 
 mongoose
   .connect(process.env.MONGODB_URI)
