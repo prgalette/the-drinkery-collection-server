@@ -37,6 +37,17 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter)
 app.use('/cocktails', cocktailsRouter)
 
+// app.get('/cocktails', (req,res)=>{    
+//   const options = {
+//       method: 'GET',
+//       url: '',
+//       headers: {
+//           'X-RapidAPI-Key':process.env.REACT_APP_API_KEY,
+//           'X-RapidAPI-Host': ''
+//       }
+//     }
+//   });
+
 mongoose
   .connect(process.env.MONGODB_URI)
   .then((x) => {
