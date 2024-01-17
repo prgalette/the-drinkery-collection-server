@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var cocktailsRouter = require('./routes/cocktails')
+// var oneTimeRouter = require('./routes/one-time')
 
 var app = express();
 
@@ -36,17 +37,9 @@ app.use(
 app.use('/users', usersRouter);
 app.use('/auth', authRouter)
 app.use('/cocktails', cocktailsRouter)
+// app.use('/one-time', oneTimeRouter)
 
-// app.get('/cocktails', (req,res)=>{    
-//   const options = {
-//       method: 'GET',
-//       url: '',
-//       headers: {
-//           'X-RapidAPI-Key':process.env.REACT_APP_API_KEY,
-//           'X-RapidAPI-Host': ''
-//       }
-//     }
-//   });
+
 
 mongoose
   .connect(process.env.MONGODB_URI)
