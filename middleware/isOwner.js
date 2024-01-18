@@ -3,7 +3,7 @@ const Cocktail = require('../models/Cocktail')
 const isOwner = (req, res, next) => {
   Cocktail.findById(req.params.cocktailId)
     .then((foundCocktail) => {
-      if (foundCocktail.owner.toString() === req.user._id) {
+      if (foundCocktail.userOwner.toString() === req.user._id) {
         next();
       } else {
         res

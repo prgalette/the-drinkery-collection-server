@@ -10,17 +10,17 @@ const isOwner = require("../middleware/isOwner");
 
 router.post("/", isAuthenticated, (req, res, next) => {
   const { name, ingredients, instructions, category, alcoholic, measures, photo } = req.body;
-
-  let theseIngredients = ingredients.split(", ")
-  let theseMeasures = measures.split(", ")
+  // console.log(req.body)
+  // let theseIngredients = ingredients.split(",")
+  // let theseMeasures = measures.split(",")
 
   Cocktail.create({
     name,
-    ingredients: theseIngredients,
+    ingredients,
     instructions,
     category,
     alcoholic,
-    measures: theseMeasures,
+    measures,
     photo,
     userOwner: req.user._id
   })
@@ -50,6 +50,8 @@ router.get("/", (req, res, next) => {
 router.get("/:cocktailId", (req, res, next) => {
   const { cocktailId } = req.params;
 
+  console.log("Params", cocktailId)
+
   if (!mongoose.Types.ObjectId.isValid(cocktailId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
@@ -58,10 +60,19 @@ router.get("/:cocktailId", (req, res, next) => {
   // Each Cocktail document has a `cocktail` array holding `_id`s of Cocktail documents
   // We use .populate() method to get swap the `_id`s for the actual Cocktail documents
   Cocktail.findById(cocktailId)
-    .populate("cocktail owner")
-    .then((cocktail) => res.status(200).json(cocktail))
+    .then((cocktail) => {
+      console.log("this cocktail", cocktail)
+      res.status(200).json(cocktail)})
     .catch((error) => res.json(error));
 });
+
+router.get('/user-cocktails/:userId', (req, res, next) => {
+  Cocktail.find({userOwner: req.params.userId})
+    .then((foundCocktails) => {
+      res.json(foundCocktails)
+    })
+    .catch((error) => res.json(error));
+})
 
 // PUT  /api/:cocktailId  -  Updates a specific cocktail by id
 router.put("/:cocktailId", isAuthenticated, isOwner, (req, res, next) => {
@@ -73,7 +84,6 @@ router.put("/:cocktailId", isAuthenticated, isOwner, (req, res, next) => {
   }
 
   Cocktail.findByIdAndUpdate(cocktailId, req.body, { new: true })
-    .then((toPopulate) => toPopulate.populate("tasks"))
     .then((updatedCocktail) => res.json(updatedCocktail))
     .catch((error) => res.json(error));
 });
@@ -82,12 +92,14 @@ router.put("/:cocktailId", isAuthenticated, isOwner, (req, res, next) => {
 router.delete("/:cocktailId", isAuthenticated, isOwner, (req, res, next) => {
   const { cocktailId } = req.params;
 
+  console.log("COCKTAIL", cocktailId)
+
   if (!mongoose.Types.ObjectId.isValid(cocktailId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
   }
 
-  Cocktail.findByIdAndRemove(cocktailId)
+  Cocktail.findByIdAndDelete(cocktailId)
     .then(() =>
       res.json({
         message: `Project with ${cocktailId} was removed successfully.`,
