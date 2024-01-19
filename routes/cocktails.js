@@ -38,7 +38,7 @@ router.get("/", (req, res, next) => {
   Cocktail.find()
     .populate("userOwner")
     .then((foundCocktail) => {
-      console.log("Found Projects ==>", foundCocktail);
+      console.log("Found Cocktails ==>", foundCocktail);
       res.json(foundCocktail);
     })
     .catch((err) => {

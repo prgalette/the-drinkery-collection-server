@@ -1,15 +1,15 @@
-const { model, Schema, default: mongoose } = require("mongoose");
+const { model, Schema } = require("mongoose");
 
 const reviewSchema = new Schema(
   {
     title: { type: String },
     review: { type: String },
-    cocktail: {
-      type: mongoose.Types.ObjectId,
+    userCocktail: {
+      type: Schema.Types.ObjectId,
       ref: "Cocktail",
     },
     userOwner: {
-      type: mongoose.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
   },
